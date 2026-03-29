@@ -128,8 +128,9 @@ export default function InputForm({ onSolve }: InputFormProps) {
             onChange={e => handleNumVarsChange(Number(e.target.value))}
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
           >
-            <option value={2}>2</option>
-            <option value={3}>3</option>
+            {Array.from({ length: 9 }, (_, i) => i + 2).map(num => (
+              <option key={num} value={num}>{num}</option>
+            ))}
           </select>
         </div>
       </div>
@@ -139,7 +140,7 @@ export default function InputForm({ onSolve }: InputFormProps) {
         <label className="block text-sm font-medium text-muted-foreground mb-2">
           Objective Function Coefficients
         </label>
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className={`flex items-center gap-2 flex-wrap ${numVariables > 5 ? 'max-h-32 overflow-y-auto' : ''}`}>
           {objCoeffs.map((val, i) => (
             <div key={i} className="flex items-center gap-1">
               {i > 0 && <span className="text-muted-foreground">+</span>}
@@ -152,9 +153,9 @@ export default function InputForm({ onSolve }: InputFormProps) {
                   setObjCoeffs(arr);
                 }}
                 placeholder="0"
-                className="w-20 rounded-md border border-input bg-background px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-ring"
+                className={`border border-input bg-background rounded-md px-2 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-ring ${numVariables > 5 ? 'w-16' : 'w-20'}`}
               />
-              <span className="text-sm text-muted-foreground font-mono">x{i + 1}</span>
+              <span className={`text-muted-foreground font-mono ${numVariables > 5 ? 'text-xs' : 'text-sm'}`}>x{i + 1}</span>
             </div>
           ))}
         </div>
@@ -165,7 +166,7 @@ export default function InputForm({ onSolve }: InputFormProps) {
         <label className="block text-sm font-medium text-muted-foreground mb-2">Constraints</label>
         <div className="space-y-3">
           {constraints.map((c, ci) => (
-            <div key={ci} className="flex items-center gap-2 flex-wrap">
+            <div key={ci} className={`flex items-center gap-2 flex-wrap ${numVariables > 5 ? 'max-h-24 overflow-y-auto p-2 border border-input rounded-md' : ''}`}>
               {c.coefficients.map((val, vi) => (
                 <div key={vi} className="flex items-center gap-1">
                   {vi > 0 && <span className="text-muted-foreground">+</span>}
@@ -178,9 +179,9 @@ export default function InputForm({ onSolve }: InputFormProps) {
                       setConstraints(newC);
                     }}
                     placeholder="0"
-                    className="w-20 rounded-md border border-input bg-background px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-ring"
+                    className={`border border-input bg-background rounded-md px-2 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-ring ${numVariables > 5 ? 'w-16' : 'w-20'}`}
                   />
-                  <span className="text-sm text-muted-foreground font-mono">x{vi + 1}</span>
+                  <span className={`text-muted-foreground font-mono ${numVariables > 5 ? 'text-xs' : 'text-sm'}`}>x{vi + 1}</span>
                 </div>
               ))}
               <select
@@ -205,7 +206,7 @@ export default function InputForm({ onSolve }: InputFormProps) {
                   setConstraints(newC);
                 }}
                 placeholder="0"
-                className="w-20 rounded-md border border-input bg-background px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-ring"
+                className={`border border-input bg-background rounded-md px-2 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-ring ${numVariables > 5 ? 'w-16' : 'w-20'}`}
               />
               {constraints.length > 1 && (
                 <button

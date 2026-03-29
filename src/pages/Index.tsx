@@ -1,15 +1,18 @@
 import { useState } from "react";
 import InputForm from "@/components/InputForm";
 import TableView from "@/components/TableView";
+import AnalyticsPanel from "@/components/AnalyticsPanel";
 import { solveDualSimplex, type ProblemInput, type SolverResult } from "@/lib/dualSimplex";
 
 export default function Index() {
   const [result, setResult] = useState<SolverResult | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
+  const [input, setInput] = useState<ProblemInput | null>(null);
 
-  const handleSolve = (input: ProblemInput) => {
-    const res = solveDualSimplex(input);
+  const handleSolve = (problemInput: ProblemInput) => {
+    const res = solveDualSimplex(problemInput);
     setResult(res);
+    setInput(problemInput);
     setCurrentStep(0);
   };
 
@@ -97,6 +100,15 @@ export default function Index() {
                 step={result.steps[currentStep]}
                 stepIndex={currentStep}
                 isLast={false}
+              />
+            )}
+
+            {/* Analytics Panel */}
+            {result.steps.length > 0 && input && (
+              <AnalyticsPanel
+                result={result}
+                problem={input}
+                headers={result.steps[0]?.headers || []}
               />
             )}
 
