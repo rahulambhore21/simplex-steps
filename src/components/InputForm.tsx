@@ -5,14 +5,57 @@ interface InputFormProps {
   onSolve: (input: ProblemInput) => void;
 }
 
-const EXAMPLE_PROBLEM: ProblemInput = {
-  objectiveType: "min",
-  numVariables: 2,
-  objectiveCoefficients: [3, 2],
-  constraints: [
-    { coefficients: [1, 1], inequality: ">=", rhs: 4 },
-    { coefficients: [2, 1], inequality: ">=", rhs: 6 },
-  ],
+const EXAMPLE_PROBLEMS: Record<number, ProblemInput> = {
+  2: {
+    objectiveType: "min",
+    numVariables: 2,
+    objectiveCoefficients: [3, 2],
+    constraints: [
+      { coefficients: [1, 1], inequality: ">=", rhs: 4 },
+      { coefficients: [2, 1], inequality: ">=", rhs: 6 },
+    ],
+  },
+  3: {
+    objectiveType: "min",
+    numVariables: 3,
+    objectiveCoefficients: [2, 3, 1],
+    constraints: [
+      { coefficients: [1, 2, 1], inequality: ">=", rhs: 5 },
+      { coefficients: [2, 1, 2], inequality: ">=", rhs: 8 },
+      { coefficients: [1, 1, 1], inequality: ">=", rhs: 4 },
+    ],
+  },
+  4: {
+    objectiveType: "min",
+    numVariables: 4,
+    objectiveCoefficients: [4, 3, 2, 5],
+    constraints: [
+      { coefficients: [2, 1, 3, 1], inequality: ">=", rhs: 10 },
+      { coefficients: [1, 2, 1, 2], inequality: ">=", rhs: 8 },
+      { coefficients: [3, 1, 2, 1], inequality: ">=", rhs: 12 },
+    ],
+  },
+  5: {
+    objectiveType: "min",
+    numVariables: 5,
+    objectiveCoefficients: [2, 3, 1, 4, 2],
+    constraints: [
+      { coefficients: [1, 1, 2, 1, 1], inequality: ">=", rhs: 6 },
+      { coefficients: [2, 1, 1, 2, 1], inequality: ">=", rhs: 8 },
+      { coefficients: [1, 2, 1, 1, 2], inequality: ">=", rhs: 10 },
+    ],
+  },
+  10: {
+    objectiveType: "min",
+    numVariables: 10,
+    objectiveCoefficients: [2, 1, 3, 1, 2, 1, 3, 2, 1, 2],
+    constraints: [
+      { coefficients: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], inequality: ">=", rhs: 15 },
+      { coefficients: [2, 1, 2, 1, 1, 2, 1, 1, 2, 1], inequality: ">=", rhs: 20 },
+      { coefficients: [1, 2, 1, 2, 1, 1, 2, 1, 1, 2], inequality: ">=", rhs: 18 },
+      { coefficients: [1, 1, 2, 1, 2, 1, 1, 2, 1, 1], inequality: ">=", rhs: 16 },
+    ],
+  },
 };
 
 export default function InputForm({ onSolve }: InputFormProps) {
@@ -54,11 +97,16 @@ export default function InputForm({ onSolve }: InputFormProps) {
   };
 
   const loadExample = () => {
-    setObjectiveType(EXAMPLE_PROBLEM.objectiveType);
-    setNumVariables(EXAMPLE_PROBLEM.numVariables);
-    setObjCoeffs(EXAMPLE_PROBLEM.objectiveCoefficients.map(String));
+    const exampleProblem = EXAMPLE_PROBLEMS[numVariables];
+    if (!exampleProblem) {
+      setError("No example available for this number of variables");
+      return;
+    }
+    setObjectiveType(exampleProblem.objectiveType);
+    setNumVariables(exampleProblem.numVariables);
+    setObjCoeffs(exampleProblem.objectiveCoefficients.map(String));
     setConstraints(
-      EXAMPLE_PROBLEM.constraints.map(c => ({
+      exampleProblem.constraints.map(c => ({
         coefficients: c.coefficients.map(String),
         inequality: c.inequality,
         rhs: String(c.rhs),
@@ -102,9 +150,10 @@ export default function InputForm({ onSolve }: InputFormProps) {
         <h2 className="text-lg font-semibold text-foreground">Problem Input</h2>
         <button
           onClick={loadExample}
+          title={`Load example for ${numVariables}-variable problem`}
           className="text-sm px-3 py-1.5 rounded-md bg-secondary text-secondary-foreground hover:opacity-80 transition-opacity font-medium"
         >
-          Load Example
+          Load Example ({numVariables} vars)
         </button>
       </div>
 
