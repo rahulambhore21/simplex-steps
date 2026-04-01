@@ -23,17 +23,6 @@ export interface VariableData {
 }
 
 /**
- * Basis history entry
- */
-export interface BasisHistoryEntry {
-  iteration: number;
-  basisVariables: string[];
-  enteringVariable?: string;
-  leavingVariable?: string;
-  rhsValues?: number[];
-}
-
-/**
  * Constraint line for plotting
  */
 export interface ConstraintPlotData {
@@ -44,6 +33,19 @@ export interface ConstraintPlotData {
   points: Array<{ x: number; y: number }>;
   inequality: string;
 }
+
+/**
+ * Basis history entry
+ */
+export interface BasisHistoryEntry {
+  iteration: number;
+  basisVariables: string[];
+  enteringVariable?: string;
+  leavingVariable?: string;
+  rhsValues?: number[];
+}
+
+
 
 /**
  * Extract Z-value progression across iterations
