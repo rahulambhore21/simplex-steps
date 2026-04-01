@@ -12,6 +12,13 @@ export interface Constraint {
   rhs: number;
 }
 
+export interface SolverResult {
+  standardForm: string[];
+  steps: IterationStep[];
+  solution: Solution | null;
+  error: string | null;
+}
+
 export interface ProblemInput {
   objectiveType: ObjectiveType;
   objectiveCoefficients: number[];
@@ -33,12 +40,7 @@ export interface Solution {
   optimalValue: number;
 }
 
-export interface SolverResult {
-  standardForm: string[];
-  steps: IterationStep[];
-  solution: Solution | null;
-  error: string | null;
-}
+
 
 /**
  * Convert the problem to standard form for Dual Simplex.
